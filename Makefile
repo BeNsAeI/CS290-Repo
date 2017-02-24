@@ -6,6 +6,8 @@ express:
 	npm install
 	clear
 	node express\ sample.js &
+debug:
+	node express\ sample.js
 start:
 	clear
 	node start.js &

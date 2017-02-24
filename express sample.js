@@ -1,10 +1,24 @@
 function Home(req,res){
-	res.type("text/plain");
-	res.send("This is the homepage!");
+	res.render("home");
 }
 function Admin(req,res){
 	res.type("text/plain");
 	res.send("This is for administrative purposes only.");
+}
+function Server(req,res){
+	res.render("server",curTime);
+}
+function Time(req,res){
+	curTime.time = (new Date(Date.now())).toLocaleTimeString('en-US');
+	res.render("time",curTime)
+}
+function reqHandler(req,res){
+	var inBound = {};
+	inBound.data = [];
+	for(var query in req.query){
+		inBound.data.push({'name':query,'value':req.query[query]});
+	}
+	res.render('servant',inBound);
 }
 function handler404(req,res){
 	res.type('text/plain');
@@ -21,15 +35,26 @@ function logOnSuccess(){
 	console.log("Express started on http:\/\/localhost:" + app.get('port') + '; press Ctrl-C to terminate.');
 }
 
-var express = require('express');
+var curTime={};
+curTime.serverStartTime = (new Date(Date.now())).toLocaleTimeString('en-US');
 
+var express = require('express');
+var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var app = express();
 
+app.engine('handlebars',handlebars.engine);
+app.set('view engine','handlebars');
 app.set('port', 1852);
 
-app.get('/',Home);
+app.get('/home',Home);
 
-app.get('/admin',Admin)
+app.get('/admin',Admin);
+
+app.get('/time',Time);
+
+app.get('/server',Server);
+
+app.get('/servant',reqHandler)
 
 app.use(handler404);
 
