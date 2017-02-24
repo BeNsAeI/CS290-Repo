@@ -1,6 +1,10 @@
-function Homefunc(req,res){
+function Home(req,res){
 	res.type("text/plain");
 	res.send("This is the homepage!");
+}
+function Admin(req,res){
+	res.type("text/plain");
+	res.send("This is for administrative purposes only.");
 }
 function handler404(req,res){
 	res.type('text/plain');
@@ -23,7 +27,9 @@ var app = express();
 
 app.set('port', 1852);
 
-app.get('/',Homefunc);
+app.get('/',Home);
+
+app.get('/admin',Admin)
 
 app.use(handler404);
 
