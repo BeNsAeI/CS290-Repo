@@ -1,0 +1,12 @@
+<h1>{{type}}: Following data was received </h1>
+<ul>
+	{{#each data}}
+		<li>{{this.name}}: {{this.value}}</li>
+	{{/each}}
+</ul>
+<h1><i>Here is the log of latest data received: </i></h1>
+<ul>
+	{{#each log}}
+                <li>Method: <b>{{this.method}}</b>, {<i>{{this.name}}</i>: <i>{{this.value}}</i>} at time: <i>{{this.time}}</i></li>
+        {{/each}}
+</ul>
