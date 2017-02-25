@@ -7,8 +7,9 @@ function reqGetHandler(req,res){
 	inBound.type = "Get";
 	var time = (new Date(Date.now())).toLocaleTimeString('en-US');
 	for(var query in req.query){
-		inBound.data.push({'name':query,'value':req.query[query],'time':"TIME"});
-		log.push({'method':"Get",'name':query,'value':req.query[query]});
+		var format = {'method':"Get",'name':query,'value':req.query[query],'time':time}
+		inBound.data.push(format);
+		log.push(format);
 	}
 	inBound.log = log;
 	res.render('post',inBound);
@@ -19,8 +20,9 @@ function reqPostHandler(req,res){
 	inBound.type = "Post";
 	var time = (new Date(Date.now())).toLocaleTimeString('en-US');
 	for(query in req.body){
-		inBound.data.push({'name':query,'value':req.body[query],'time':"TIME"});
-		log.push({'method':"Post",'name':query,'value':req.body[query]});
+		var format = {'method':"Post",'name':query,'value':req.body[query],'time':time}
+		inBound.data.push(format);
+		log.push(format);
 	}
 	inBound.log = log;
 	res.render('post',inBound);
