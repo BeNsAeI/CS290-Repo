@@ -29,6 +29,43 @@ function reqPostHandler(req,res){
 	console.log(inBound);
 	console.log(req.body);
 }
+function Query(req,res,next){
+	pool.query("SELECT * FROM webdev",[mysql.query],DBresult);
+	console.log("QUERY: "+results.lastStatus);
+	res.render('DB',results);
+}
+function DBresult(err, result){
+	var lastStatus = "-";
+	if(err)
+	{
+		console.log("ERROR: "+err);
+		var lastStatus = "<font color=\"red\">Offline</font>";
+		return;
+	}
+	lastStatus = "<font color=\"green\">Online</font>";
+	results.table = result;
+	results.lastStatus = lastStatus;
+	console.log(results.table[0].firstname);
+}
+function DBConnection(err,con){
+	if(err)
+	{
+		console.log(err);
+		console.log("Error: Could not connect to DB. (1)");
+		return;
+	}
+	con.query("SELECT * FROM webdev");
+	if(err)
+	{
+		con.release();
+		console.log(err);
+		console.log("Error: Could not connect to DB. (2)");
+		return;
+	}
+	con.query("insert into webdev (`firstname`,`lastname`) values (\"server\",\"started\");");
+	console.log("DB was successful!");
+	con.release();
+}
 function handler404(req,res){
 	res.type('text/plain');
 	res.status(404);
@@ -50,10 +87,23 @@ curTime.serverStartTime = (new Date(Date.now())).toLocaleTimeString('en-US');
 var express = require('express');
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var bodyParser = require('body-parser');
+var mysql = require('mysql');
+
 var app = express();
 
 // For logging purposes
 var log = [];
+
+//For DB
+var pool = mysql.createPool({
+	host  : 'localhost',
+	user  : 'root',
+	password: 'H@02122705029e',
+	database: 'test'
+});
+pool.getConnection(DBConnection);
+
+var results={}
 
 // for form handling:
 app.use(bodyParser.urlencoded({extended:false}));
@@ -69,6 +119,8 @@ app.get('/server',Server);
 app.get('/',reqGetHandler);
 
 app.post('/',reqPostHandler);
+
+app.get('/DB',Query);
 
 app.use(handler404);
 

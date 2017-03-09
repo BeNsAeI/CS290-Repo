@@ -1,7 +1,8 @@
 all:
 	npm install
 	clear
-	make start
+#	make start
+	make debug
 debug:
 	node start.js
 start:
