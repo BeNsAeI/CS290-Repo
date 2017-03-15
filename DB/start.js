@@ -30,7 +30,7 @@ function reqPostHandler(req,res){
 	console.log(req.body);
 }
 function Query(req,res,next){
-	pool.query("SELECT * FROM webdev",[mysql.query],DBresult);
+	pool.query("SELECT * FROM webdev;",[mysql.query],DBresult);
 	console.log("QUERY: "+results.lastStatus);
 	res.render('DB',results);
 }
@@ -45,7 +45,12 @@ function DBresult(err, result){
 	lastStatus = "<font color=\"green\">Online</font>";
 	results.table = result;
 	results.lastStatus = lastStatus;
-	console.log(results.table[0].firstname);
+//	console.log(results.table[0].firstname);
+}
+function dbClear(req,res,next){
+	pool.query("DELETE FROM webdev WHERE firstname=\"server\";",[mysql.query],DBresult);
+	pool.query("SELECT * FROM webdev;",[mysql.query],DBresult);
+	res.render('DB',results);
 }
 function DBConnection(err,con){
 	if(err)
@@ -88,6 +93,7 @@ var express = require('express');
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var dbcon = require('./dbcon.js');
 
 var app = express();
 
@@ -95,12 +101,7 @@ var app = express();
 var log = [];
 
 //For DB
-var pool = mysql.createPool({
-	host  : 'localhost',
-	user  : 'root',
-	password: 'H@02122705029e',
-	database: 'test'
-});
+var pool = dbcon.getPool();
 pool.getConnection(DBConnection);
 
 var results={}
@@ -121,6 +122,8 @@ app.get('/',reqGetHandler);
 app.post('/',reqPostHandler);
 
 app.get('/DB',Query);
+
+app.get('/clear',dbClear);
 
 app.use(handler404);
 
