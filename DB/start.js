@@ -1,3 +1,19 @@
+function resetTable(req,res,next){
+	var context = {};
+	pool.query("DROP TABLE IF EXISTS workouts", function(err){
+		var createString = "CREATE TABLE workouts("+
+		"id INT PRIMARY KEY AUTO_INCREMENT,"+
+		"name VARCHAR(255) NOT NULL,"+
+		"reps INT,"+
+		"weight INT,"+
+		"date DATE,"+
+		"lbs BOOLEAN)";
+		pool.query(createString, function(err){
+			res.writeHead(302, {'Location': '/db'});
+			res.end();
+		})
+	});
+};
 function Server(req,res){
 	res.render("server",curTime);
 }
@@ -30,9 +46,9 @@ function reqPostHandler(req,res){
 	console.log(req.body);
 }
 function Query(req,res,next){
-	pool.query("SELECT * FROM webdev;",[mysql.query],DBresult);
+	pool.query("SELECT * FROM workouts;",[mysql.query],DBresult);
 	console.log("QUERY: "+results.lastStatus+".");
-	while(!results.lastStatus || !results.table[0])
+	while(!results.lastStatus || (!results.table[0] && results.table.length != 0))
 	{
 		res.writeHead(302, {'Location': '/db'});
 		res.end();
@@ -53,8 +69,8 @@ function DBresult(err, result){
 	return results;
 }
 function dbClear(req,res,next){
-	pool.query("DELETE FROM webdev WHERE firstname=\"server\";",[mysql.query],DBresult);
-	pool.query("SELECT * FROM webdev;",[mysql.query],DBresult);
+	pool.query("DELETE FROM workouts WHERE name=\"server\";",[mysql.query],DBresult);
+	pool.query("SELECT * FROM workouts;",[mysql.query],DBresult);
 	res.writeHead(302, {'Location': '/db'});
 	res.end();
 }
@@ -65,7 +81,7 @@ function DBConnection(err,con){
 		console.log("Error: Could not connect to DB. (1)");
 		return;
 	}
-	con.query("SELECT * FROM webdev");
+	con.query("SELECT * FROM workouts");
 	if(err)
 	{
 		con.release();
@@ -73,7 +89,7 @@ function DBConnection(err,con){
 		console.log("Error: Could not connect to DB. (2)");
 		return;
 	}
-	con.query("insert into webdev (`firstname`,`lastname`) values (\"server\",\"started\");");
+	con.query("insert into workouts (`name`) values (\"server\");");
 	console.log("DB was successful!");
 	con.release();
 }
@@ -118,8 +134,12 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 app.engine('handlebars',handlebars.engine);
+
 app.set('view engine','handlebars');
+
 app.set('port', 1852);
+
+app.get('/reset-table',resetTable);
 
 app.get('/server',Server);
 
