@@ -13,6 +13,7 @@ function resetTable(req,res,next){
 			res.end();
 		})
 	});
+	results.lastStatus = false;
 };
 function Server(req,res){
 	res.render("server",curTime);

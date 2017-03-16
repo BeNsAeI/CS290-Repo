@@ -10,11 +10,17 @@
 	<BR>
 	<BR>
 	<button type="button" id="clearButton">Clear</button>
+	<button type="button" id="resetButton">Reset</button>
 	<script>
-		function redirect(){
+		function clearRedirect(){
 			window.location="./clear";
 		}
-		var button = document.getElementById("clearButton");
-		button.onclick = redirect;
+		function resetRedirect(){
+			window.location="./reset-table";
+		}
+		var clearButton = document.getElementById("clearButton");
+		var resetButton = document.getElementById("resetButton");
+		clearButton.onclick = clearRedirect;
+		resetButton.onclick = resetRedirect;
 	</script>
 </ul>
