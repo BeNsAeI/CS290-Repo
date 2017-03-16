@@ -29,8 +29,9 @@ function reqGetHandler(req,res){
 		log.push(format);
 	}
 	inBound.log = log;
-//	res.render('post',inBound);
-	res.render('home',inBound);
+	pool.query(insert(inBound.log[0].value,inBound.log[1].value,inBound.log[2].value,inBound.log[3].value,inBound.log[4].value),[mysql.query],DBresult);
+	res.render('post',inBound);
+//	res.render('home',inBound);
 }
 function reqPostHandler(req,res){
 	var inBound = {};
@@ -43,8 +44,9 @@ function reqPostHandler(req,res){
 		log.push(format);
 	}
 	inBound.log = log;
-//	res.render('post',inBound);
-	res.render('home',inBound);
+	pool.query(insert(inBound.log[0].value,inBound.log[1].value,inBound.log[2].value,inBound.log[3].value,inBound.log[4].value),[mysql.query],DBresult);
+	res.render('post',inBound);
+//	res.render('home',inBound);
 	console.log(inBound);
 	console.log(req.body);
 }
@@ -112,7 +114,16 @@ function handler500(err,req,res,next){
 function logOnSuccess(){
 	console.log("Express started on http:\/\/localhost:" + app.get('port') + '; press Ctrl-C to terminate.');
 }
-
+function insert(name,reps,weight,date,lbs){
+	var query = "insert into workouts (`name`,`reps`,`weight`,`date`,`lbs`) values ("+
+		"\""+name+"\""+", "+
+		reps+", "+
+		weight+", "+
+		"\'"+date+"\', "+
+		lbs+
+		");";
+	console.log("query is: "+query);
+}
 var curTime={};
 curTime.serverStartTime = (new Date(Date.now())).toLocaleTimeString('en-US');
 
@@ -148,9 +159,9 @@ app.get('/reset-table',resetTable);
 
 app.get('/server',Server);
 
-//app.get('/',reqGetHandler);
+app.get('/insert',reqGetHandler);
 
-//app.post('/',reqPostHandler);
+app.post('/insert',reqPostHandler);
 
 app.get('/',Query);
 
