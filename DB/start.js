@@ -9,7 +9,7 @@ function resetTable(req,res,next){
 		"date DATE,"+
 		"lbs BOOLEAN)";
 		pool.query(createString, function(err){
-			res.writeHead(302, {'Location': '/db'});
+			res.writeHead(302, {'Location': '/'});
 			res.end();
 		})
 	});
@@ -29,7 +29,8 @@ function reqGetHandler(req,res){
 		log.push(format);
 	}
 	inBound.log = log;
-	res.render('post',inBound);
+//	res.render('post',inBound);
+	res.render('home',inBound);
 }
 function reqPostHandler(req,res){
 	var inBound = {};
@@ -42,7 +43,8 @@ function reqPostHandler(req,res){
 		log.push(format);
 	}
 	inBound.log = log;
-	res.render('post',inBound);
+//	res.render('post',inBound);
+	res.render('home',inBound);
 	console.log(inBound);
 	console.log(req.body);
 }
@@ -51,10 +53,11 @@ function Query(req,res,next){
 	console.log("QUERY: "+results.lastStatus+".");
 	while(!results.lastStatus || (!results.table[0] && results.table.length != 0))
 	{
-		res.writeHead(302, {'Location': '/db'});
+		res.writeHead(302, {'Location': '/'});
 		res.end();
 	}
-	res.render('DB',results);
+//	res.render('DB',results);
+	res.render('home',results);
 }
 function DBresult(err, result){
 	var lastStatus = "-";
@@ -72,7 +75,8 @@ function DBresult(err, result){
 function dbClear(req,res,next){
 	pool.query("DELETE FROM workouts WHERE name=\"server\";",[mysql.query],DBresult);
 	pool.query("SELECT * FROM workouts;",[mysql.query],DBresult);
-	res.writeHead(302, {'Location': '/db'});
+	results.lastStatus = false;
+	res.writeHead(302, {'Location': '/'});
 	res.end();
 }
 function DBConnection(err,con){
@@ -144,9 +148,11 @@ app.get('/reset-table',resetTable);
 
 app.get('/server',Server);
 
-app.get('/',reqGetHandler);
+//app.get('/',reqGetHandler);
 
-app.post('/',reqPostHandler);
+//app.post('/',reqPostHandler);
+
+app.get('/',Query);
 
 app.get('/DB',Query);
 

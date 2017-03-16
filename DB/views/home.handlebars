@@ -1,0 +1,26 @@
+<h1>Database:</h1>
+<ul>
+	<li>Server status: {{{lastStatus}}}</li>
+</ul>
+<BR>
+<ul>
+	{{#each table}}
+                <li><font color="blue"> <b>{{this.id}}</b></font>, <font color="green">{{this.name}}</font></li>
+        {{/each}}
+	<BR>
+	<BR>
+	<button type="button" id="clearButton">Clear</button>
+	<button type="button" id="resetButton">Reset</button>
+	<script>
+		function clearRedirect(){
+			window.location="./clear";
+		}
+		function resetRedirect(){
+			window.location="./reset-table";
+		}
+		var clearButton = document.getElementById("clearButton");
+		var resetButton = document.getElementById("resetButton");
+		clearButton.onclick = clearRedirect;
+		resetButton.onclick = resetRedirect;
+	</script>
+</ul>
