@@ -7,4 +7,14 @@
 	{{#each table}}
                 <li><font color="blue"> <b>{{this.firstname}}</b></font>, <font color="green">{{this.lastname}}</font></li>
         {{/each}}
+	<BR>
+	<BR>
+	<button type="button" id="clearButton">Clear</button>
+	<script>
+		function redirect(){
+			window.location="./clear";
+		}
+		var button = document.getElementById("clearButton");
+		button.onclick = redirect;
+	</script>
 </ul>

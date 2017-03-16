@@ -31,7 +31,12 @@ function reqPostHandler(req,res){
 }
 function Query(req,res,next){
 	pool.query("SELECT * FROM webdev;",[mysql.query],DBresult);
-	console.log("QUERY: "+results.lastStatus);
+	console.log("QUERY: "+results.lastStatus+".");
+	while(!results.lastStatus || !results.table[0])
+	{
+		res.writeHead(302, {'Location': '/db'});
+		res.end();
+	}
 	res.render('DB',results);
 }
 function DBresult(err, result){
@@ -45,12 +50,13 @@ function DBresult(err, result){
 	lastStatus = "<font color=\"green\">Online</font>";
 	results.table = result;
 	results.lastStatus = lastStatus;
-//	console.log(results.table[0].firstname);
+	return results;
 }
 function dbClear(req,res,next){
 	pool.query("DELETE FROM webdev WHERE firstname=\"server\";",[mysql.query],DBresult);
 	pool.query("SELECT * FROM webdev;",[mysql.query],DBresult);
-	res.render('DB',results);
+	res.writeHead(302, {'Location': '/db'});
+	res.end();
 }
 function DBConnection(err,con){
 	if(err)
