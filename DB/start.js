@@ -141,7 +141,7 @@ function del(ID){
 	return query;
 }
 function edit(_name,_reps,_weight,_date,_lbs,_id){
-	var query = "UPDATE workouts SET `name`=\""+_name+"\",`reps`="+_reps+",`weight`="+_weight+",`date`="+_date+",`lbs`="+_lbs+" WHERE id="+_id+";";
+	var query = "UPDATE workouts SET `name`=\""+_name+"\",`reps`="+_reps+",`weight`="+_weight+",`date`=\'"+_date+"\',`lbs`="+_lbs+" WHERE id="+_id+";";
 	console.log("query is: "+query);
 }
 var curTime={};

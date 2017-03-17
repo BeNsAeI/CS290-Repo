@@ -190,6 +190,11 @@
 					}
 					function updateButton{{this.id}}(){
 						var action = "edit";
+						var Name{{this.id}} = document.getElementById("updateName{{this.id}}");
+						var Reps{{this.id}} = document.getElementById("updateReps{{this.id}}");
+						var Weight{{this.id}} = document.getElementById("updateWeight{{this.id}}");
+						var Date{{this.id}} = document.getElementById("updateDate{{this.id}}");
+						var Lbs{{this.id}} = document.getElementById("updateLbs{{this.id}}");
 						console.log("Clicked edit: {{this.id}}");
 						var req = new XMLHttpRequest();
 						req.open("POST", "http://localhost:1852/insert", true);
@@ -224,11 +229,11 @@
 						}
 						var response = JSON.parse(this.responseText);
 						});
-						if(Lbs.checked)
-							Lbs.value = 1;
+						if(Lbs{{this.id}}.checked)
+							Lbs{{this.id}}.value = 1;
 						else
-							Lbs.value = 0;
-						req.send('{"name":"'+Name.value+'","reps":"'+Reps.value+'","weight":"'+Weight.value+'","date":"'+Date.value+'","lbs":"'+Lbs.value+'","Id":"'+Id.value+'","action":"edit"}');
+							Lbs{{this.id}}.value = 0;
+						req.send('{"name":"'+Name{{this.id}}.value+'","reps":"'+Reps{{this.id}}.value+'","weight":"'+Weight{{this.id}}.value+'","date":"'+Date{{this.id}}.value+'","lbs":"'+Lbs{{this.id}}.value+'","Id":"'+{{this.id}}+'","action":"edit"}');
 						event.preventDefault();
 						setTimeout(function() {
 							location.reload();
