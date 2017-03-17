@@ -21,6 +21,7 @@ function Server(req,res){
 function reqGetHandler(req,res){
 	var inBound = {};
 	inBound.data = [];
+	log = [];
 	inBound.type = "Get";
 	var time = (new Date(Date.now())).toLocaleTimeString('en-US');
 	for(var query in req.query){
@@ -29,14 +30,17 @@ function reqGetHandler(req,res){
 		log.push(format);
 	}
 	inBound.log = log;
-	pool.query(insert(inBound.log[0].value,inBound.log[1].value,inBound.log[2].value,inBound.log[3].value,inBound.log[4].value),[mysql.query],DBresult);
+	if(inBound.log[inBound.log.length-1].value=="add")
+		pool.query(insert(inBound.log[0].value,inBound.log[1].value,inBound.log[2].value,inBound.log[3].value,inBound.log[4].value),[mysql.query],DBresult);
+	if(inBound.log[inBound.log.length-1].value=="delete")
+		pool.query(del(inBound.log[inBound.log.length-2].value),[mysql.query],DBresult);
 	res.render('post',inBound);
-//	res.render('home',inBound);
 }
 function reqPostHandler(req,res){
 	var inBound = {};
 	inBound.data = [];
 	inBound.type = "Post";
+	log = [];
 	var time = (new Date(Date.now())).toLocaleTimeString('en-US');
 	for(query in req.body){
 		var format = {'method':"Post",'name':query,'value':req.body[query],'time':time}
@@ -44,11 +48,19 @@ function reqPostHandler(req,res){
 		log.push(format);
 	}
 	inBound.log = log;
-	pool.query(insert(inBound.log[0].value,inBound.log[1].value,inBound.log[2].value,inBound.log[3].value,inBound.log[4].value),[mysql.query],DBresult);
+	console.log("***");
+	console.log(log);
+	console.log(inBound.log)
+	console.log(inBound.log[0].value);
+	if(inBound.log[inBound.log.length-1].value=="add")
+		pool.query(insert(inBound.log[0].value,inBound.log[1].value,inBound.log[2].value,inBound.log[3].value,inBound.log[4].value),[mysql.query],DBresult);
+	if(inBound.log[inBound.log.length-1].value=="delete")
+		pool.query(del(inBound.log[inBound.log.length-2].value),[mysql.query],DBresult);
+	console.log(inBound.log[0].value);
+	console.log("***");
 	res.render('post',inBound);
-//	res.render('home',inBound);
-	console.log(inBound);
-	console.log(req.body);
+	//console.log(inBound);
+	//console.log(req.body);
 }
 function Query(req,res,next){
 	pool.query("SELECT * FROM workouts;",[mysql.query],DBresult);
@@ -114,17 +126,23 @@ function handler500(err,req,res,next){
 function logOnSuccess(){
 	console.log("Express started on http:\/\/localhost:" + app.get('port') + '; press Ctrl-C to terminate.');
 }
-function insert(name,reps,weight,date,lbs){
+function insert(_name,_reps,_weight,_date,_lbs){
 	var query = "insert into workouts (`name`,`reps`,`weight`,`date`,`lbs`) values ("+
-		"\""+name+"\""+", "+
-		reps+", "+
-		weight+", "+
-		"\'"+date+"\', "+
-		lbs+
+		"\""+_name+"\""+", "+
+		_reps+", "+
+		_weight+", "+
+		"\'"+_date+"\', "+
+		_lbs+
 		");";
 	console.log("query is: "+query);
 	return query;
 }
+function del(ID){
+	var query = "DELETE FROM workouts WHERE id="+ID+";"
+	console.log("query is: "+query);
+	return query;
+}
+
 var curTime={};
 curTime.serverStartTime = (new Date(Date.now())).toLocaleTimeString('en-US');
 
