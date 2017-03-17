@@ -106,7 +106,7 @@ function DBConnection(err,con){
 		console.log("Error: Could not connect to DB. (2)");
 		return;
 	}
-	con.query("insert into workouts (`name`) values (\"server\");");
+//	con.query("insert into workouts (`name`) values (\"server\");");
 	console.log("DB was successful!");
 	con.release();
 }
@@ -143,6 +143,7 @@ function del(ID){
 function edit(_name,_reps,_weight,_date,_lbs,_id){
 	var query = "UPDATE workouts SET `name`=\""+_name+"\",`reps`="+_reps+",`weight`="+_weight+",`date`=\'"+_date+"\',`lbs`="+_lbs+" WHERE id="+_id+";";
 	console.log("query is: "+query);
+	return query;
 }
 var curTime={};
 curTime.serverStartTime = (new Date(Date.now())).toLocaleTimeString('en-US');
