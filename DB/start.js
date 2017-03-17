@@ -49,14 +49,12 @@ function reqPostHandler(req,res){
 	}
 	inBound.log = log;
 	console.log("***");
-	console.log(log);
-	console.log(inBound.log)
-	console.log(inBound.log[0].value);
 	if(inBound.log[inBound.log.length-1].value=="add")
 		pool.query(insert(inBound.log[0].value,inBound.log[1].value,inBound.log[2].value,inBound.log[3].value,inBound.log[4].value),[mysql.query],DBresult);
 	if(inBound.log[inBound.log.length-1].value=="delete")
 		pool.query(del(inBound.log[inBound.log.length-2].value),[mysql.query],DBresult);
-	console.log(inBound.log[0].value);
+	if(inBound.log[inBound.log.length-1].value=="edit")
+		pool.query(edit(inBound.log[0].value,inBound.log[1].value,inBound.log[2].value,inBound.log[3].value,inBound.log[4].value,inBound.log[5].value),[mysql.query],DBresult);
 	console.log("***");
 	res.render('post',inBound);
 	//console.log(inBound);
@@ -142,7 +140,10 @@ function del(ID){
 	console.log("query is: "+query);
 	return query;
 }
-
+function edit(_name,_reps,_weight,_date,_lbs,_id){
+	var query = "UPDATE workouts SET `name`=\""+_name+"\",`reps`="+_reps+",`weight`="+_weight+",`date`="+_date+",`lbs`="+_lbs+" WHERE id="+_id+";";
+	console.log("query is: "+query);
+}
 var curTime={};
 curTime.serverStartTime = (new Date(Date.now())).toLocaleTimeString('en-US');
 

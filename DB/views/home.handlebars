@@ -101,7 +101,7 @@
 					var Id = {{this.id}};
 					function deleteButton{{this.id}}(){
 						var action = "delete";
-						console.log("Clicked {{this.id}}");
+						console.log("Clicked delete: {{this.id}}");
 						var req = new XMLHttpRequest();
 						req.open("POST", "http://localhost:1852/insert", true);
 						req.setRequestHeader('Content-Type', 'application/json');
@@ -145,11 +145,56 @@
 							location.reload();
 						}, 200);
 					}
-					function editbutton{{this.id}}(){
+					function editButton{{this.id}}(){
 						var action = "edit";
+						console.log("Clicked edit: {{this.id}}");
+						var req = new XMLHttpRequest();
+						req.open("POST", "http://localhost:1852/insert", true);
+						req.setRequestHeader('Content-Type', 'application/json');
+						req.addEventListener('load',function(){
+						console.log(JSON.parse(this.responseText));
+						console.log("status: "+JSON.parse(this.status));
+						if(JSON.parse(this.status) > 300)
+							console.log("status message: "+JSON.parse(this.statusText));
+						else
+							console.log("status message: NA");
+						console.log("path: "+JSON.parse(this.readyState));
+						switch(JSON.parse(this.readyState)){
+							case 0:
+								console.log("XMLHttpRequest.UNSENT");
+								break;
+							case 1:
+								console.log("XMLHttpRequest.OPENED");
+								break;
+							case 2:
+								console.log("XMLHttpRequest.HEADERS_RECEIVED");
+								break;
+							case 3:
+								console.log("XMLHttpRequest.LOADING");
+								break;
+							case 4:
+								console.log("XMLHttpRequest.DONE");
+								break;
+							default:
+								console.log("NA");
+								break;
+						}
+						var response = JSON.parse(this.responseText);
+						});
+						if(Lbs.checked)
+							Lbs.value = 1;
+						else
+							Lbs.value = 0;
+						req.send('{"name":"'+Name.value+'","reps":"'+Reps.value+'","weight":"'+Weight.value+'","date":"'+Date.value+'","lbs":"'+Lbs.value+'","Id":"'+Id.value+'","action":"edit"}');
+						event.preventDefault();
+						setTimeout(function() {
+							location.reload();
+						}, 200);
 					}
 					var delButton = document.getElementById("deleteButton{{this.id}}");
 					delButton.onclick = deleteButton{{this.id}};
+					var edButton = document.getElementById("editButton{{this.id}}");
+					edButton.onclick = editButton{{this.id}};
 				</script>
 			</tr>
 			{{/each}}
