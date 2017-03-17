@@ -123,6 +123,7 @@ function insert(name,reps,weight,date,lbs){
 		lbs+
 		");";
 	console.log("query is: "+query);
+	return query;
 }
 var curTime={};
 curTime.serverStartTime = (new Date(Date.now())).toLocaleTimeString('en-US');
