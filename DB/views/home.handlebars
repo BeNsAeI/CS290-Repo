@@ -84,6 +84,7 @@
 					<th>Reps</th>
 					<th>Weight</th>
 					<th>Date</th>
+					<th>Lbs</th>
 					<th>Action</th>
 				</strong>
 			</tr>
@@ -91,10 +92,11 @@
 		<tbody>
 			{{#each table}}
 			<tr id="row" value="{{this.id}}">
-				<td>{{this.name}}</td>
-				<td>{{this.reps}}</td>
-				<td>{{this.weight}}</td>
-				<td>{{this.date}}</td>
+				<td id="name{{this.id}}" visibility="hidden">{{this.name}}</td>
+				<td id="reps{{this.id}}">{{this.reps}}</td>
+				<td id="weight{{this.id}}">{{this.weight}}</td>
+				<td id="date{{this.id}}">{{this.date}}</td>
+				<td id="lbs{{this.id}}">{{this.lbs}}</td>
 				<td><button type="button" id="deleteButton{{this.id}}" value="{{this.id}}">Delete</button></td>
 				<td><button type="button" id="editButton{{this.id}}" value="{{this.id}}">Edit</button></td>
 				<script>
@@ -146,6 +148,47 @@
 						}, 200);
 					}
 					function editButton{{this.id}}(){
+						var edButton = document.getElementById("editButton{{this.id}}");
+						edButton.innerText="Update";
+
+						var tr_name = document.getElementById("name{{this.id}}");
+						tr_name.innerText="";
+						var tr_name_field = document.createElement('input');
+						tr_name_field.type="text"; tr_name_field.size="10"; tr_name_field.id="updateName{{this.id}}"; tr_name_field.value="{{this.name}}";
+						tr_name.appendChild(tr_name_field);
+
+						var tr_reps = document.getElementById("reps{{this.id}}");
+						tr_reps.innerText="";
+						var tr_reps_field = document.createElement('input');
+						tr_reps_field.type="number"; tr_reps_field.size="10"; tr_reps_field.id="updateReps{{this.id}}"; tr_reps_field.style="width: 50px;";tr_reps_field.value="{{this.reps}}";
+						tr_reps.appendChild(tr_reps_field);
+
+						var tr_weight = document.getElementById("weight{{this.id}}");
+						tr_weight.innerText="";
+						var tr_weight_field = document.createElement('input');
+						tr_weight_field.type="number"; tr_weight_field.size="10"; tr_weight_field.id="updateWeight{{this.id}}";tr_weight_field.style="width: 50px;";tr_weight_field.value="{{this.weight}}";
+						tr_weight.appendChild(tr_weight_field);
+
+						var tr_date = document.getElementById("date{{this.id}}");
+						tr_date.innerText="";
+						var tr_date_field = document.createElement('input');
+						var MyDate = new Date();
+						var MyDateString;
+						MyDate.setDate(MyDate.getDate());
+						MyDateString = MyDate.getFullYear() + '-' + ('0' + (MyDate.getMonth()+1)).slice(-2) + '-' +('0' + MyDate.getDate()).slice(-2);
+						console.log(MyDateString);
+						tr_date_field.type="date"; tr_date_field.id="updateDate{{this.id}}";tr_date_field.value=MyDateString;
+						tr_date.appendChild(tr_date_field);
+
+						var tr_lbs = document.getElementById("lbs{{this.id}}");
+						tr_lbs.innerText="";
+						var tr_lbs_field = document.createElement('input');
+						tr_lbs_field.type="checkbox"; tr_lbs_field.id="updateLbs{{this.id}}";tr_lbs_field.checked={{this.lbs}};
+						tr_lbs.appendChild(tr_lbs_field);
+
+						edButton.onclick=updateButton{{this.id}};
+					}
+					function updateButton{{this.id}}(){
 						var action = "edit";
 						console.log("Clicked edit: {{this.id}}");
 						var req = new XMLHttpRequest();
